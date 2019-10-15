@@ -18,7 +18,6 @@ package io.github.hidroh.materialistic.widget;
 
 import android.annotation.TargetApi;
 import android.os.Build;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,7 +25,6 @@ import android.webkit.WebViewClient;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import io.github.hidroh.materialistic.AdBlocker;
 
 public class AdBlockWebViewClient extends WebViewClient {
@@ -38,6 +36,7 @@ public class AdBlockWebViewClient extends WebViewClient {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressWarnings("deprecation")
     @Override
     public final WebResourceResponse shouldInterceptRequest(WebView view, String url) {
         if (!mAdBlockEnabled) {
@@ -52,24 +51,5 @@ public class AdBlockWebViewClient extends WebViewClient {
         }
         return ad ? AdBlocker.createEmptyResource() :
                 super.shouldInterceptRequest(view, url);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Nullable
-    @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-        if (!mAdBlockEnabled) {
-            return super.shouldInterceptRequest(view, request);
-        }
-        boolean ad;
-        String url = request.getUrl().toString();
-        if (!mLoadedUrls.containsKey(url)) {
-            ad = AdBlocker.isAd(url);
-            mLoadedUrls.put(url, ad);
-        } else {
-            ad = mLoadedUrls.get(url);
-        }
-        return ad ? AdBlocker.createEmptyResource() :
-                super.shouldInterceptRequest(view, request);
     }
 }

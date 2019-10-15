@@ -26,7 +26,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebViewClient;
 
-import io.github.hidroh.materialistic.AppUtils;
 import io.github.hidroh.materialistic.annotation.Synthetic;
 
 public class WebView extends android.webkit.WebView {
@@ -79,7 +78,7 @@ public class WebView extends android.webkit.WebView {
             super.onPageStarted(view, url, favicon);
             view.pageUp(true);
             WebView webView = (WebView) view;
-            if (AppUtils.urlEquals(url, webView.mPendingUrl)) {
+            if (TextUtils.equals(url, webView.mPendingUrl)) {
                 view.setVisibility(VISIBLE);
             }
             if (mClient != null) {
